@@ -12,6 +12,10 @@ services:
       - ./nginx-proxy/letsencrypt:/etc/letsencrypt
     networks:
       - proxy-net
+    healthcheck:
+      test: "/usr/bin/check-health"
+      interval: 10s
+      timeout: 3s
 
   pihole:
     image: pihole/pihole:latest
@@ -32,6 +36,11 @@ services:
       - NET_ADMIN
     networks:
       - proxy-net
+    healthcheck:
+      test: "dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1"
+      interval: 60s
+      timeout: 10s
+      start_period: 10s
 
   gluetun:
     image: qmcgaw/gluetun
@@ -50,14 +59,20 @@ services:
       - WIREGUARD_ADDRESSES=${VPN_WG_ADDRESS}
       - SERVER_CITIES=${VPN_CITY}
       - HTTP_CONTROL_SERVER_ADDRESS=:8000
-      - DNS_ADDRESS={$VPN_DNS_ADDRESS}
-      - FIREWALL_OUTBOUND_SUBNETS={$INTERNAL_SUBNETS}
+      - DNS_ADDRESS=${VPN_DNS_ADDRESS}
+      - FIREWALL_OUTBOUND_SUBNETS=${INTERNAL_SUBNETS}
     ports:
       - 8282:8282 # Web UI
       - 6881:6881 # Torrent Peering
       - 6881:6881/udp
     networks:
       - proxy-net
+    healthcheck:
+      test: "/gluetun-entrypoint healthcheck"
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 1
 
   glances:
     image: nicolargo/glances:latest
@@ -70,6 +85,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /run/user/1000/pulse:/run/user/1000/pulse:ro
+    healthcheck:
+      test: "curl --fail http://localhost:61208 || exit 1"
+      interval: 60s
+      timeout: 10s
+      start_period: 10s
 
 networks:
   proxy-net:
