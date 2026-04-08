@@ -1,0 +1,19 @@
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    restart: unless-stopped
+    environment:
+      - PUID=${PGID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Australia/Sydney}
+    volumes:
+      - ./heimdall/config:/config
+    ports:
+      - 8081:80
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true

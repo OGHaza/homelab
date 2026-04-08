@@ -1,0 +1,40 @@
+services:
+  komodo-db:
+    image: mongo:7.0
+    container_name: komodo-db
+    restart: unless-stopped
+    volumes:
+      - ./komodo/mongodb_data:/data/db
+    networks:
+      - proxy-net
+      - komodo-net
+
+  komodo-core:
+    image: ghcr.io/moghtech/komodo-core:2
+    container_name: komodo-core
+    restart: unless-stopped
+    depends_on:
+      - komodo-db
+    ports:
+      - 9120:9120
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - KOMODO_DATABASE_URI=mongodb://komodo-db:27017
+      - KOMODO_LOCAL_AUTH=true
+      - KOMODO_ENABLE_NEW_USERS=false
+      - KOMODO_DISABLE_CONFIRM_DIALOG=true
+      - KOMODO_DISABLE_USER_REGISTRATION=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./komodo/config:/config
+      - ./komodo/backups:/backups
+      - ./komodo/keys:/config/keys
+    networks:
+      - proxy-net
+      - komodo-net
+
+networks:
+  komodo-net:
+    driver: bridge
+  proxy-net:
+    external: true

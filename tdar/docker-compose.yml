@@ -1,0 +1,46 @@
+services:
+  tdarr:
+    container_name: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    ports:
+      - 8265:8265 # WebUI
+      - 8266:8266 # Server port
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - serverIP=tdarr
+    volumes:
+      - ./tdarr/configs:/app/configs
+      - ./tdarr/server:/app/server
+      - /mnt/gaza:/mnt/gaza
+      - /mnt/galilee:/mnt/galilee
+    networks:
+      - tdarr-net
+      - proxy-net
+
+  tdarr-node:
+    container_name: tdarr-node
+    image: ghcr.io/haveagitgat/tdarr_node:latest
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - PUID=${PGID:-1000}
+      - PGID=${PGID:-1000}
+      - nodeID=${NODE_ID}
+      - serverIP=tdarr
+      - serverPort=8266
+    volumes:
+      - ./tdarr/configs:/app/configs
+      - /mnt/gaza:/mnt/gaza
+      - /mnt/galilee:/mnt/galilee
+    networks:
+      - tdarr-net
+      - proxy-net
+
+networks:
+  tdarr-net:
+    driver: bridge
+  proxy-net:
+    external: true

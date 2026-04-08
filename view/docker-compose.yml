@@ -1,0 +1,78 @@
+services:
+  seerr:
+    image: seerr/seerr:latest
+    container_name: seerr
+    restart: unless-stopped
+    user: 1000:1000
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Australia/Sydney}
+      - LOG_LEVEL=debug
+    volumes:
+      - /opt/stacks/view/seerr/config:/app/config
+      - /mnt/gaza/media:/data/media_gaza
+      - /mnt/galilee/media:/data/media_galilee
+    ports:
+      - 5055:5055
+    networks:
+      - media-net
+      - proxy-net
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Australia/Sydney}
+      - JELLYFIN_PublishedServerUrl=${JELLYFIN_PUBLISHED_SERVER_URL}
+    volumes:
+      - ./jellyfin/config:/config
+      - /mnt/gaza/media:/data/media_gaza
+      - /mnt/galilee/media:/data/media_galilee
+    ports:
+      - 8096:8096
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
+    devices:
+      - /dev/dri:/dev/dri
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 65536
+    networks:
+      - media-net
+      - proxy-net
+
+  qui:
+    image: ghcr.io/hotio/qui
+    container_name: qui
+    restart: unless-stopped
+    ports:
+      - 7476:7476
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Australia/Sydney}
+      - UMASK=002
+      - WEBUI_PORTS=7476/tcp
+    volumes:
+      - ./qui/config:/config
+    networks:
+      - media-net
+      - proxy-net
+
+networks:
+  media-net:
+    driver: bridge
+  proxy-net:
+    external: true

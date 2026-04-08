@@ -1,0 +1,26 @@
+services:
+  lenovo-thinkpad:
+    image: ghcr.io/moghtech/komodo-periphery:2
+    container_name: lenovo-thinkpad
+    restart: unless-stopped
+    ports:
+      - 8120:8120
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - PERIPHERY_STACK_DIR=${STACK_DIR}
+      - PERIPHERY_CORE_ADDRESS=http://komodo-core:9120
+      - PERIPHERY_CONNECT_AS=${PERIPHERY_CONNECT_AS}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/stacks:/opt/stacks
+      - ../ctrl/komodo/keys:/etc/komodo/keys:ro
+      - ../ctrl/komodo/keys:/config/keys
+      - ../ctrl/komodo/keys:/etc/komodo/keys:ro
+      - /mnt/gaza:/mnt/gaza
+      - /mnt/galilee:/mnt/galilee
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true

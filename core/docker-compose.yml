@@ -1,0 +1,76 @@
+services:
+  nginx-proxy:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    volumes:
+      - ./nginx-proxy/data:/data
+      - ./nginx-proxy/letsencrypt:/etc/letsencrypt
+    networks:
+      - proxy-net
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 8080:80
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - WEBPASSWORD=${PIHOLE_PASSWORD}
+      - FTLCONF_webserver_port=8080
+    volumes:
+      - ./pihole/etc-pihole:/etc/pihole
+      - ./pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - proxy-net
+
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - /opt/stacks/core/gluetun:/gluetun
+    environment:
+      - VPN_TYPE=wireguard
+      - VPN_SERVICE_PROVIDER=${VPN_PROVIDER}
+      - WIREGUARD_PRIVATE_KEY=${VPN_WG_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${VPN_WG_ADDRESS}
+      - SERVER_CITIES=${VPN_CITY}
+      - HTTP_CONTROL_SERVER_ADDRESS=:8000
+      - DNS_ADDRESS={$VPN_DNS_ADDRESS}
+      - FIREWALL_OUTBOUND_SUBNETS={$INTERNAL_SUBNETS}
+    ports:
+      - 8282:8282 # Web UI
+      - 6881:6881 # Torrent Peering
+      - 6881:6881/udp
+    networks:
+      - proxy-net
+
+  glances:
+    image: nicolargo/glances:latest
+    container_name: glances
+    restart: unless-stopped
+    pid: host
+    network_mode: host
+    environment:
+      - "GLANCES_OPT=-w"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/user/1000/pulse:/run/user/1000/pulse:ro
+
+networks:
+  proxy-net:
+    external: true
