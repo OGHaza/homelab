@@ -13,7 +13,7 @@ services:
     networks:
       - proxy-net
     healthcheck:
-      test: "/usr/bin/check-health"
+      test: ["CMD", "/usr/bin/check-health"]
       interval: 10s
       timeout: 3s
 
@@ -37,7 +37,7 @@ services:
     networks:
       - proxy-net
     healthcheck:
-      test: "dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1"
+      test: ["CMD-SHELL", "dig +short +norecurse +retry=0 @127.0.0.1 pi.hole || exit 1"]
       interval: 60s
       timeout: 10s
       start_period: 10s
@@ -68,11 +68,35 @@ services:
     networks:
       - proxy-net
     healthcheck:
-      test: "/gluetun-entrypoint healthcheck"
-      start_period: 10s
+      test: ["CMD", "/gluetun-entrypoint", "healthcheck"]
+      start_period: 30s
       interval: 5s
       timeout: 5s
       retries: 1
+
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+    user: "${PUID:-1000}:${PGID:-1000}"
+    volumes:
+      - ./ntfy/cache:/var/cache/ntfy
+      - ./ntfy/config:/etc/ntfy
+    ports:
+      - 8082:80
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --tries=1 http://localhost:80/v1/health -O - | grep -q '\"healthy\":true' || exit 1"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    init: true # required with healthcheck for ntfy
 
   glances:
     image: nicolargo/glances:latest
@@ -86,7 +110,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /run/user/1000/pulse:/run/user/1000/pulse:ro
     healthcheck:
-      test: "curl --fail http://localhost:61208 || exit 1"
+      test: ["CMD-SHELL", "curl --fail http://localhost:61208 || exit 1"]
       interval: 60s
       timeout: 10s
       start_period: 10s

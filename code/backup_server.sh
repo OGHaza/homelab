@@ -53,4 +53,7 @@ chown 1000:1000 "$BACKUP_DIR/$FILENAME"
 # 4. Keep the 5 most recent backups, delete the rest
 ls -t /mnt/gaza/backups/server_lean_backup_*.tar.gz | tail -n +6 | xargs -d '\n' rm -f --
 
+# Notify your phone when the backup is done
+curl -d "Lenovo Thinkpad Backup Complete: $FILENAME" http://localhost:8082/admin
+
 echo "--- Backup Complete: $FILENAME ---"
