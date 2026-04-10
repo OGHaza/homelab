@@ -1,5 +1,6 @@
 An overengineered media manager
 
+```text
 /opt/stacks
 ├── core/
 │   ├── glances ................ Basically a view of bash's top
