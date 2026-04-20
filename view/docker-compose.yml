@@ -12,17 +12,21 @@ services:
     volumes:
       - /opt/stacks/view/seerr/config:/app/config
       - /mnt/gaza/media:/data/media_gaza
-      - /mnt/galilee/media:/data/media_galilee
     ports:
       - 5055:5055
     networks:
-      - media-net
       - proxy-net
     healthcheck:
-      test: ["CMD-SHELL", "wget http://localhost:5055/api/v1/status -qO /dev/null || exit 1"]
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:5055/api/v1/status || exit 1"]
       interval: 60s
-      timeout: 20s
       start_period: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
@@ -36,7 +40,6 @@ services:
     volumes:
       - ./jellyfin/config:/config
       - /mnt/gaza/media:/data/media_gaza
-      - /mnt/galilee/media:/data/media_galilee
     ports:
       - 8096:8096
       - 8920:8920
@@ -44,27 +47,55 @@ services:
       - 1900:1900/udp
     devices:
       - /dev/dri:/dev/dri
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-        reservations:
-          memory: 4G
     ulimits:
       nofile:
         soft: 8192
         hard: 65536
     networks:
-      - media-net
       - proxy-net
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://localhost:8096 || exit 1"]
       interval: 60s
-      timeout: 20s
       start_period: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2G
+
+  stash:
+    image: stashapp/stash:latest
+    container_name: stash
+    restart: unless-stopped
+    ports:
+      - "9999:9999"
+    environment:
+      - TZ=${TZ:-Australia/Sydney}
+      - STASH_STASH=/data/adult
+      - STASH_GENERATED=/data/stash/generated
+      - STASH_METADATA=/data/stash/metadata/
+      - STASH_CACHE=/data/stash/cache/
+    volumes:
+      - ./stash/config:/root/.stash
+      - /mnt/gaza/media:/data
+    devices:
+      - /dev/dri:/dev/dri # gpu
+    networks:
+      - proxy-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:9999 || exit 1"]
+      interval: 60s
+      start_period: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
 
 networks:
-  media-net:
-    driver: bridge
   proxy-net:
     external: true

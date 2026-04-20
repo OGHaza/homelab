@@ -16,15 +16,20 @@ services:
       - ../ctrl/komodo/keys:/config/keys
       - ../ctrl/komodo/keys:/etc/komodo/keys:ro
       - /mnt/gaza:/mnt/gaza
-      - /mnt/galilee:/mnt/galilee
     networks:
       - proxy-net
     healthcheck:
       test: ["CMD-SHELL", "[ -d /proc/1 ] || exit 1"]
       interval: 60s
+      start_period: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+
 networks:
   proxy-net:
     external: true
