@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  proxied: true
+  assets-path: /assets
+theme:
+  background-color: 240 7 9
+  contrast-multiplier: 1.3
+  custom-css-file: /assets/css/custom.css
+branding:
+  favicon-url: /assets/favicon/favicon-32x32.png
+  app-name: "Dashboard"
+  hide-footer: true
+pages:
+  - name: Dashboard
+    width: default
+    hide-desktop-navigation: true
+    center-vertically: true
+    columns:
+      - size: small
+        widgets:
+          - $include: /assets/widgets/server-stats.yml
+          - $include: /assets/widgets/ip-status.yml
+          - $include: /assets/widgets/vpn-mullvad-status.yml
+          - $include: /assets/widgets/dns-stats.yml
+          - $include: /assets/widgets/qbittorrent-stats.yml
+          - $include: /assets/widgets/jellyfin-stats.yml
+          - $include: /assets/widgets/payday-progress.yml
+      - size: full
+        widgets:
+          - $include: /assets/widgets/services.yml
+          - $include: /assets/widgets/containers.yml
+

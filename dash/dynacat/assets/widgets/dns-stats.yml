@@ -1,0 +1,9 @@
+- type: dns-stats
+  title: DNS
+  service: pihole-v6
+  url: http://pihole.home/
+  password: ${PIHOLE_PASSWORD}
+  allow-insecure: true
+  hide-graph: true
+  hide-top-domains: true
+  update-interval: 5m

@@ -1,0 +1,14 @@
+- type: server-stats
+  title: Server
+  servers:
+    - type: local
+      name: lenovo-thinkpad
+      hide-mountpoints-by-default: true
+      mountpoints:
+        "/":
+          name: Root
+          hide: false
+        "/mnt/gaza/":
+          name: Gaza
+          hide: false
+

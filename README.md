@@ -1,5 +1,7 @@
 An overengineered media manager
 
+![Dashboard](./assets/dashboard.jpg)
+
 ```text
 /opt/stacks
 ├── core/
@@ -8,15 +10,15 @@ An overengineered media manager
 │   └── pihole ................. DNS and adblock
 ├── ctrl/
 │   ├── autoheal ............... Restarts unhealthy containers
-│   ├── dozzle ................. Aggregated log viewer
 │   ├── komodo-core ............ Container manager
 │   └── komodo-db .............. Container manager db
 ├── dash/
-│   └── heimdall ............... Dashboard
+│   └── dynacat ................ Dashboard
 ├── node/
 │   └── lenovo-thinkpad ........ Komodo agent
 ├── stat/
 │   ├── cadvisor ............... Docker container resource monitor
+│   ├── dozzle ................. Aggregated log viewer
 │   ├── glances ................ View of bash top
 │   ├── grafana ................ Visualization dashboard for metrics
 │   ├── node-exporter .......... Hardware/Host metric exporter
@@ -36,8 +38,9 @@ An overengineered media manager
 │   ├── pinchflat .............. Youtube video downloader
 │   ├── prowlarr ............... Index manager
 │   ├── radarr ................. Movie download manager
-│   └── sonarr ................. TV show download manager
+│   ├── sonarr ................. TV show download manager
+│   └── unpackerr .............. Automatic UnRAR
 └── xvpn/
     ├── gluetun ................ VPN client
     ├── qbittorrent ............ Torrent client
-    └── slskd .................. Soulseek client
+    └── slskd .................. SoulSeek client

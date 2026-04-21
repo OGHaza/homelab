@@ -1,0 +1,67 @@
+- type: monitor
+  cache: 1m
+  title: Services
+  sites:
+    - title: Bazarr
+      url: http://bazarr.home/
+      icon: sh:bazarr
+    - title: Cleanuparr
+      url: http://cleanuparr.home/
+      icon: di:cleanuperr
+    - title: Dozzle
+      url: http://dozzle.home/
+      icon: sh:dozzle
+    - title: Glances
+      url: http://glances.home/
+      icon: sh:glances
+    - title: Grafana
+      url: http://grafana.home/
+      icon: sh:grafana
+    - title: Jellyfin
+      url: http://jellyfin.home/
+      icon: sh:jellyfin
+    - title: Komodo
+      url: http://komodo.home/
+      icon: auto-invert sh:komodo
+    - title: Lidarr
+      url: http://lidarr.home/
+      icon: sh:lidarr
+    - title: Pi-Hole
+      url: http://pihole.home/
+      icon: sh:pi-hole
+    - title: Pinchflat
+      url: http://pinchflat.home/
+      icon: di:pinchflat
+    - title: Prowlarr
+      url: http://prowlarr.home/
+      icon: sh:prowlarr
+    - title: Nginx Proxy Manager
+      url: http://proxy.home/
+      icon: sh:nginx-proxy-manager
+    - title: qBittorrent
+      url: http://qbittorrent.home/
+      icon: sh:qbittorrent
+    - title: Radarr
+      url: http://radarr.home/
+      icon: auto-invert sh:radarr
+    - title: Router
+      url: http://router.home/
+      icon: sh:tp-link
+    - title: Seerr
+      url: http://seerr.home/
+      icon: sh:seerr
+    - title: Slskd
+      url: http://slskd.home/
+      icon: sh:slskd
+    - title: Sonarr
+      url: http://sonarr.home/
+      icon: sh:sonarr
+    - title: Stash
+      url: http://stash.home/
+      icon: auto-invert sh:stash
+    - title: Tailscale
+      url: http://tailscale.home/
+      icon: auto-invert sh:tailscale
+    - title: Tdarr
+      url: http://tdarr.home/
+      icon: di:tdarr

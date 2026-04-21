@@ -10,6 +10,8 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
+    networks:
+      - proxy-net
     command: --config.file=/etc/prometheus/prometheus.yml
     healthcheck:
       test: ["CMD-SHELL", "wget -q http://localhost:9090/-/healthy -O - | grep 'Prometheus Server is Healthy' || exit 1"]
@@ -56,6 +58,11 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Australia/Sydney}
+    command:
+      - '-docker_only=true'
+      - '-disable_root_cgroup_stats=true'
+      - '-housekeeping_interval=30s'
+      - '-disable_metrics=disk,diskIO,referenced_memory'
     devices:
       - /dev/kmsg:/dev/kmsg
     volumes:
@@ -63,6 +70,8 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - proxy-net
     healthcheck:
       test: ["CMD-SHELL", "wget -q http://localhost:8080/healthz -O -"]
       interval: 30s
@@ -85,6 +94,8 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /rootfs:/rootfs:ro
+    networks:
+      - proxy-net
     command: --path.procfs=/host/proc --path.sysfs=/host/sys --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     healthcheck:
       test: ["CMD-SHELL", "wget -q http://localhost:9100/metrics -O - | head -5"]

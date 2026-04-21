@@ -1,0 +1,23 @@
+- type: custom-api
+  title: WAN
+  cache: 1h
+  url: http://ip-api.com/json/?fields=24593
+  update-interval: 5m
+  template: |
+    {{ $status := .JSON.String "status" }}
+    {{ $country := .JSON.String "country" }}
+    {{ $ip := .JSON.String "query" }}
+    {{ $city := .JSON.String "city" }}
+    {{ $connected := eq $status "success" }}
+    {{ if $connected }}
+      <div class="color-highlight size-h3">
+        <span class="color-positive">●</span>
+        Connected
+      </div>
+    {{ else }}
+      <div class="color-highlight size-h3">
+        <span class="color-negative">●</span>
+        Disconnected
+      </div>
+    {{ end }}
+    <div class="size-h5">{{ $ip }} - {{ $city }}, {{ $country }}</div>

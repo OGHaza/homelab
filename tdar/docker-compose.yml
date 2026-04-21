@@ -14,10 +14,12 @@ services:
     volumes:
       - ./tdarr/configs:/app/configs
       - ./tdarr/server:/app/server
+      - ./tdarr/temp:/temp
       - /mnt/gaza:/mnt/gaza
     networks:
-      - tdarr-net
       - proxy-net
+    devices:
+      - /dev/dri:/dev/dri # gpu
     healthcheck:
       test: ["CMD-SHELL", "curl --fail http://localhost:8265 || exit 1"]
       interval: 60s
@@ -27,8 +29,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
-          memory: 2G
+          cpus: '0.5'
+          memory: 512M
 
   tdarr-node:
     container_name: tdarr-node
@@ -43,10 +45,12 @@ services:
       - serverPort=8266
     volumes:
       - ./tdarr/configs:/app/configs
+      - ./tdarr/temp:/temp
       - /mnt/gaza:/mnt/gaza
     networks:
-      - tdarr-net
       - proxy-net
+    devices:
+      - /dev/dri:/dev/dri # gpu
     healthcheck:
       test: ["CMD-SHELL", "ps aux | grep Tdarr_Node | grep -v grep || exit 1"]
       interval: 60s
@@ -56,11 +60,9 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
-          memory: 2G
+          cpus: '3.0'
+          memory: 4G
 
 networks:
-  tdarr-net:
-    driver: bridge
   proxy-net:
     external: true

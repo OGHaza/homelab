@@ -1,0 +1,107 @@
+- type: docker-containers
+  title: Containers
+  hide-by-default: false
+  containers:
+    autoheal:
+      url: http://komodo.home/stacks/69d587bb6512409996c35fa6/service/autoheal
+      icon: mdi:hospital-box
+    bazarr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/bazarr
+      icon: sh:bazarr
+    cadvisor:
+      parent: grafana
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/cadvisor
+      icon: sh:cadvisor
+    cleanuparr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/cleanuparr
+      icon: di:cleanuparr
+    dozzle:
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/dozzle
+      icon: sh:dozzle
+    dynacat:
+      url: http://komodo.home/stacks/69b18a0cbc4ecfbc77d26c73/service/dynacat
+      icon: sh:dynacat
+    flaresolverr:
+      parent: prowlarr
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/flaresolverr
+      icon: sh:flaresolverr
+    glances:
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/glances
+      icon: sh:glances
+    gluetun:
+      url: http://komodo.home/stacks/69e3c3bc49417cabb796339c/service/gluetun
+      icon: sh:gluetun
+    grafana:
+      id: grafana
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/grafana
+      icon: sh:grafana
+    jellyfin:
+      url: http://komodo.home/stacks/69cb9b79bebd83dcc58d09e2/service/jellyfin
+      icon: sh:jellyfin
+    komodo-core:
+      id: komodo-core
+      name: komodo
+      url: http://komodo.home/stacks/69d587bb6512409996c35fa6/service/komodo-core
+      icon: auto-invert sh:komodo
+    komodo-db:
+      parent: komodo-core
+      url: http://komodo.home/stacks/69d587bb6512409996c35fa6/service/komodo-db
+      icon: sh:komodo
+    lenovo-thinkpad:
+      url: http://komodo.home/servers/69b1896cbc4ecfbc77d26c5e
+      icon: mdi:laptop
+    lidarr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/lidarr
+      icon: sh:lidarr
+    nginx-proxy:
+      url: http://komodo.home/stacks/69b18987bc4ecfbc77d26c61/service/nginx-proxy
+      icon: sh:nginx-proxy-manager
+    node-exporter:
+      parent: grafana
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/node-exporter
+    ntfy:
+      url: http://komodo.home/stacks/69b18987bc4ecfbc77d26c61/service/ntfy
+      icon: sh:ntfy
+    pihole:
+      url: http://komodo.home/stacks/69b18987bc4ecfbc77d26c61/service/pihole
+      icon: sh:pi-hole
+    pinchflat:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/pinchflat
+      icon: di:pinchflat
+    prometheus:
+      parent: grafana
+      url: http://komodo.home/stacks/69e94c3eb64519e22018e090/service/prometheus
+      icon: sh:prometheus
+    prowlarr:
+      id: prowlarr
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/prowlarr
+      icon: sh:prowlarr
+    qbittorrent:
+      url: http://komodo.home/stacks/69e3c3bc49417cabb796339c/service/qbittorrent
+      icon: sh:qbittorrent
+    radarr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/radarr
+      icon: auto-invert sh:radarr
+    seerr:
+      url: http://komodo.home/stacks/69cb9b79bebd83dcc58d09e2/service/seerr
+      icon: sh:seerr
+    slskd:
+      url: http://komodo.home/stacks/69e3c3bc49417cabb796339c/service/slskd
+      icon: sh:slskd
+    sonarr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/sonarr
+      icon: sh:sonarr
+    stash:
+      url: http://komodo.home/stacks/69cb9b79bebd83dcc58d09e2/service/stash
+      icon: auto-invert sh:stash
+    tdarr:
+      id: tdarr
+      url: http://komodo.home/stacks/69d09c1af468c13956371e8f/service/tdarr
+      icon: di:tdarr
+    tdarr-node:
+      parent: tdarr
+      url: http://komodo.home/stacks/69d09c1af468c13956371e8f/service/tdarr-node
+      icon: di:tdarr
+    unpackerr:
+      url: http://komodo.home/stacks/69cb9b3dbebd83dcc58d09db/service/unpackerr
+      icon: mdi:bag-personal

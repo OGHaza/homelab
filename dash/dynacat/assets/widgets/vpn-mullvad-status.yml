@@ -1,0 +1,28 @@
+- type: custom-api
+  title: VPN
+  cache: 1m
+  url: http://gluetun.home/v1/publicip/ip
+  template: |
+    <div>
+      <div>
+        <div>
+          {{ $country := (.JSON.String "country") }}
+          {{ $connected := ne $country "Australia" }}
+          {{ $ip := (.JSON.String "public_ip") }}
+          {{ $city := (.JSON.String "city") }}
+          {{ $country := (.JSON.String "country") }}
+          {{ if $connected }}
+            <div class="color-highlight size-h3">
+              <span class="color-positive">●</span>
+              Connected
+            </div>
+          {{ else }}
+            <div class="color-highlight size-h3">
+              <span class="color-negative">●</span>
+              Disconnected
+            </div>
+          {{ end }}
+        </div>
+        <div class="size-h5">{{ $ip }} - {{ $city }}, {{ $country }}</div>
+      </div>
+    </div>

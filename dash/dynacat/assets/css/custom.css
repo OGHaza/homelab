@@ -1,0 +1,11 @@
+.widget-beta-icon {
+    display: none;
+}
+
+.widget + .widget {
+    margin-top: 13px;
+}
+
+.progress-value {
+    background: linear-gradient(90deg, #71259d, #8f37c3);
+}
